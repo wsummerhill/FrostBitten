@@ -1,6 +1,6 @@
-# FrostByte2
+# FrostBitten
 
-*Modified version of FrostByte - All thanks to [pwn1sher/frostbyte](https://github.com/pwn1sher/frostbyte) for the original!*
+*Modified version of FrostByte - All thanks to [pwn1sher/frostbyte](https://github.com/pwn1sher/frostbyte) for the original and of course to[med0x2e/SigFlip](https://github.com/med0x2e/SigFlip)*
 
 Updates made to original project:
 - Replace SigFlip.exe with latest .NET version
@@ -19,7 +19,8 @@ Updates made to original project:
 
 4. Create the config file **myTest.exe.config** <br />
 
-5. Run the executable created in Step 1 which should launch your shellcode
+5. Run the executable created in Step 1 which should launch your shellcode <br />
+`.\myTest.exe`
 
 
 ### Lessons Learned
