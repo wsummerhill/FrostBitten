@@ -1,4 +1,6 @@
-# FrostByte
+# FrostByte2
+
+*Modified version of FrostByte - All thanks to [pwn1sher/frostbyte](https://github.com/pwn1sher/frostbyte) for the original!*
 
 ## Progolue:
 
