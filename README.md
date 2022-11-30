@@ -17,7 +17,7 @@ Updates made to original project:
 3. Compile **SharpBitten.cs** <br />
 `csc /target:library /out:ToRegister.dll FrostBitten.cs`
 
-4. Create the config file **myTest.exe.config** <br />
+4. Modify the config file **myTest.exe.config** as needed if you made changes to your DLL name or AppDomain name <br />
 
 5. Run the executable created in Step 1 which should launch your shellcode <br />
 `.\myTest.exe`
