@@ -2,6 +2,34 @@
 
 *Modified version of FrostByte - All thanks to [pwn1sher/frostbyte](https://github.com/pwn1sher/frostbyte) for the original!*
 
+Updates made to original project:
+- Replace SigFlip.exe with latest .NET version
+- Change .NET assembly executable 
+- Modify shellcode exeuction technique
+
+## Instructions
+
+1. Inject shellcode into .NET executable with SigFlip.exe <br />
+`.\SigFlip.exe -i .\RegAsm.exe -s .\calc-x64.bin -o .\myTest.exe -e KeyzKeyz`
+
+2. Modify **SharpBitten.cs** to reflect <br />
+
+3. Compile **SharpBitten.cs** <br />
+`csc /target:library /out:ToRegister.dll FrostBitten.cs`
+
+4. Create the config file **myTest.exe.config** <br />
+
+5. Run the executable created in Step 1 which should launch your shellcode
+
+
+### Lessons Learned
+
+- If the execution works as expected without errors but doesn't launch the shellcode, modify the lines on X and X to change the shellcode address length
+
+
+-----------------------------------------------------------
+# ORIGINAL README BELOW:
+
 ## Progolue:
 
 In the past few days I've been experimenting with the [AppDomain manager injection](https://gist.github.com/djhohnstein/afb93a114b848e16facf0b98cd7cb57b) technique had a decent success with it in my previous Red Team engagements against certain EDRs. Although, this is really good for initial access vector, I wanted to release a POC which will help hiding your shellcode elsewhere. No more shellcode embedded DLL files! 
