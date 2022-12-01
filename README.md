@@ -6,26 +6,35 @@ Updates made to original project:
 - Replace SigFlip.exe with latest .NET version
 - Change .NET assembly executable 
 - Modify shellcode exeuction technique
+- Encrypt the signatured "tag" used in SigFlip to evade static analysis and decrypt it at runtime
 
 ## Instructions
 
-1. Inject shellcode into .NET executable with SigFlip.exe <br />
-`.\SigFlip.exe -i .\RegAsm.exe -s .\calc-x64.bin -o .\myTest.exe -e KeyzKeyz`
+1. Choose a .NET executable to inject shellcode into or use RegAsm.exe (provided)
 
-2. Modify **SharpBitten.cs** to reflect <br />
+2. Inject your shellcode into the .NET executable with SigFlip.exe <br />
+Ex. `.\SigFlip.exe -i .\RegAsm.exe -s .\calc-x64.bin -o .\myTest.exe -e KeyzKeyz`
 
-3. Compile **SharpBitten.cs** <br />
+3. Modify **SharpByte.cs** to reflect the name of your EXE in line X<br />
+
+4. Compile **SharpByte.cs** <br />
 `csc /target:library /out:ToRegister.dll FrostBitten.cs`
 
-4. Modify the config file **myTest.exe.config** as needed if you made changes to your DLL name or AppDomain name <br />
+5. Modify the AppDomain config file **myTest.exe.config** as needed if you made changes to your DLL name or AppDomain name <br />
 
-5. Run the executable created in Step 1 which should launch your shellcode <br />
+6. Place the following payload files into the same folder: <br />
+- myTest.exe
+- myTest.exe.config
+- ToRegister.dll
+
+7. Run the executable created in Step 1 which should launch your shellcode <br />
 `.\myTest.exe`
 
 
 ### Lessons Learned
 
-- If the execution works as expected without errors but doesn't launch the shellcode, modify the lines on X and X to change the shellcode address length
+- If the execution works as expected without errors but doesn't launch the shellcode, you may need to modify the lines on X and X to change the shellcode address length. You can uncomment line X to view the decrypted shellcode output in the file "debug-DecryptedScode.txt" to help with this.
+- 
 
 
 -----------------------------------------------------------

