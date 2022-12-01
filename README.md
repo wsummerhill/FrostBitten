@@ -1,6 +1,6 @@
-# FrostBitten
+# FrostByte
 
-*Modified version of FrostByte - All thanks to [pwn1sher/frostbyte](https://github.com/pwn1sher/frostbyte) for the original and of course to[med0x2e/SigFlip](https://github.com/med0x2e/SigFlip)*
+*Modified version of FrostByte - All thanks to [pwn1sher/frostbyte](https://github.com/pwn1sher/frostbyte) for the original and of course to [med0x2e/SigFlip](https://github.com/med0x2e/SigFlip)*
 
 Updates made to original project:
 - Replace SigFlip.exe with latest .NET version
@@ -10,7 +10,7 @@ Updates made to original project:
 
 ## Instructions
 
-1. Choose a .NET executable to inject shellcode into or use RegAsm.exe (provided)
+1. Choose a .NET executable to inject shellcode into or use **RegAsm.exe** (provided in repo)
 
 2. Inject your shellcode into the .NET executable with SigFlip.exe <br />
 Ex. `.\SigFlip.exe -i .\RegAsm.exe -s .\calc-x64.bin -o .\myTest.exe -e KeyzKeyz`
@@ -34,7 +34,7 @@ Ex. `.\SigFlip.exe -i .\RegAsm.exe -s .\calc-x64.bin -o .\myTest.exe -e KeyzKeyz
 ### Lessons Learned
 
 - If the execution works as expected without errors but doesn't launch the shellcode, you may need to modify the lines on X and X to change the shellcode address length. You can uncomment line X to view the decrypted shellcode output in the file "debug-DecryptedScode.txt" to help with this.
-- 
+- If one .NET assembly works successfully but others fail, you'll have to find other assemblies since I was unable to get many of them to work. Working assemblies so far included RegAsm.exe and CasPol.exe.
 
 
 -----------------------------------------------------------
