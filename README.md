@@ -38,7 +38,7 @@ Ex. `.\SigFlip.exe -i .\RegAsm.exe -s .\calc-x64.bin -o .\myTest.exe -e KeyzKeyz
 - If the execution works as expected without errors but doesn't launch the shellcode, you may need to modify the lines on 154 and 157 to change the shellcode address length. 
 - You can uncomment line 165 to view the decrypted shellcode output in the file "debug-DecryptedScode.txt" to help if the shellcode is being properly decrypted
 - If one .NET assembly works successfully but others fail, you'll have to find other assemblies since I was unable to get many of them to work. 
-	- Working assemblies so far included RegAsm.exe and CasPol.exe.
+	- Working assemblies so far included RegAsm.exe and CasPol.exe (I haven't tried many others yet).
 
 
 -----------------------------------------------------------
