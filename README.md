@@ -5,17 +5,19 @@
 Updates made to original project:
 - Replace SigFlip.exe with latest .NET version
 - Change .NET assembly executable 
-- Modify shellcode exeuction technique
-- Encrypt the signatured "tag" used in SigFlip to evade static analysis and decrypt it at runtime
+- Modify variable names and functions for better evasion
+- Modify shellcode exeuction method to a lesser known technique
+- Encrypt the signatured "tag" used in SigFlip to evade static analysis which gets decrypted at runtime
 
 ## Instructions
 
-1. Choose a .NET executable to inject shellcode into or use **RegAsm.exe** (provided in repo)
+1. Choose a .NET executable to inject shellcode into, or use **RegAsm.exe** (provided in repo)<br />
+Make sure that your EXE is SIGNED for better evasion!!<br />
 
 2. Inject your shellcode into the .NET executable with SigFlip.exe <br />
 Ex. `.\SigFlip.exe -i .\RegAsm.exe -s .\calc-x64.bin -o .\myTest.exe -e KeyzKeyz`
 
-3. Modify **SharpByte.cs** to reflect the name of your EXE in line X<br />
+3. Modify **SharpByte.cs** to reflect the name and path of your shellcode embedded EXE in line 144<br />
 
 4. Compile **SharpByte.cs** <br />
 `csc /target:library /out:ToRegister.dll FrostBitten.cs`
@@ -33,8 +35,10 @@ Ex. `.\SigFlip.exe -i .\RegAsm.exe -s .\calc-x64.bin -o .\myTest.exe -e KeyzKeyz
 
 ### Lessons Learned
 
-- If the execution works as expected without errors but doesn't launch the shellcode, you may need to modify the lines on X and X to change the shellcode address length. You can uncomment line X to view the decrypted shellcode output in the file "debug-DecryptedScode.txt" to help with this.
-- If one .NET assembly works successfully but others fail, you'll have to find other assemblies since I was unable to get many of them to work. Working assemblies so far included RegAsm.exe and CasPol.exe.
+- If the execution works as expected without errors but doesn't launch the shellcode, you may need to modify the lines on 154 and 157 to change the shellcode address length. 
+- You can uncomment line 165 to view the decrypted shellcode output in the file "debug-DecryptedScode.txt" to help if the shellcode is being properly decrypted
+- If one .NET assembly works successfully but others fail, you'll have to find other assemblies since I was unable to get many of them to work. 
+	- Working assemblies so far included RegAsm.exe and CasPol.exe.
 
 
 -----------------------------------------------------------
