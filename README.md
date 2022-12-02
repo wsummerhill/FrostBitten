@@ -12,7 +12,7 @@ Updates made to original project:
 ## Instructions
 
 1. Choose a .NET executable to inject shellcode into, or use **RegAsm.exe** (provided in repo)<br />
-Make sure that your EXE is SIGNED for better evasion!!<br />
+**Make sure that your EXE is SIGNED for better evasion!!**<br />
 
 2. Inject your shellcode into the .NET executable with SigFlip.exe <br />
 Ex. `.\SigFlip.exe -i .\RegAsm.exe -s .\calc-x64.bin -o .\myTest.exe -e KeyzKeyz`
@@ -25,9 +25,11 @@ Ex. `.\SigFlip.exe -i .\RegAsm.exe -s .\calc-x64.bin -o .\myTest.exe -e KeyzKeyz
 5. Modify the AppDomain config file **myTest.exe.config** as needed if you made changes to your DLL name or AppDomain name <br />
 
 6. Place the following payload files into the same folder: <br />
+```
 - myTest.exe
 - myTest.exe.config
 - ToRegister.dll
+```
 
 7. Run the executable created in Step 1 which should launch your shellcode <br />
 `.\myTest.exe`
