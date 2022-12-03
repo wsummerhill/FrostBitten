@@ -160,7 +160,7 @@ public class codebase
         // Decryption routine - Replace the below hardcoded key with your password
         byte[] assemblyFile = Decrypt(regfile, "KeyzKeyz");
 
-        // Output decrypted shellcode to file for comparison to original shellcode
+        // Output decrypted shellcode to file for debugging - Compare to original shellcode
         WriteFile(".\\debug-DecryptedScode.txt", assemblyFile);
         	
         stream.Close();
