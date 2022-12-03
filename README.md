@@ -4,9 +4,9 @@
 
 Updates made to original project:
 - Replace SigFlip.exe with latest .NET version
-- Change .NET assembly executable 
+- Changed .NET assembly executable to RegAsm.exe
 - Modify variable names and functions for better evasion
-- Modify shellcode exeuction method to a lesser known technique
+- Modify shellcode callback method to a lesser known technique for evasion
 - Encrypt the signatured "tag" used in SigFlip to evade static analysis which gets decrypted at runtime
 
 ## Instructions
@@ -38,7 +38,7 @@ Ex. `.\SigFlip.exe -i .\RegAsm.exe -s .\calc-x64.bin -o .\myTest.exe -e KeyzKeyz
 ### Lessons Learned
 
 - If the execution works as expected without errors but doesn't launch the shellcode, you may need to modify the lines on 154 and 157 to change the shellcode address length. 
-- You can uncomment line 165 to view the decrypted shellcode output in the file "debug-DecryptedScode.txt" to help if the shellcode is being properly decrypted
+- For debugging purposes, the decrypted shellcode will be written to the file "debug-DecryptedScode.txt" to check if the decryption routine is properly hitting the shellcodes location. 
 - If one .NET assembly works successfully but others fail, you'll have to find other assemblies since I was unable to get many of them to work. 
 	- Working assemblies so far included RegAsm.exe and CasPol.exe (I haven't tried many others yet).
 
